@@ -18,30 +18,46 @@ const FilterBar = () => {
 
   const fetchCategory = async (category) => {
     setLoading(true);
+
     if (category === "All") {
-      const data = await fetchMeals("a");
+      await fetchMeals("a");
     } else {
       const data = await getByCategories(category);
       setMeals(data);
     }
+
     setLoading(false);
   };
+
   return (
-    <div className="w-full overflow-x-auto  mb-10 mt-10 p-5 flex  justify-center items-center ">
-      <div className="flex gap-4 min-w-max px-2">
-        {categories.map((category) => (
-          <motion.button
-            key={category}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-2 rounded-full bg-white/10 backdrop-blur-lg border border-white/20 text-black hover:text-orange-400 hover:border-orange-400 transition whitespace-nowrap"
-            onClick={() => fetchCategory(category)}
+    <section className="w-full mt-16 mb-16">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="w-full overflow-x-auto scrollbar-hide py-4">
+          <div
+            className="flex gap-4 sm:gap-5 
+                       min-w-max 
+                       justify-start sm:justify-center"
           >
-            {category}
-          </motion.button>
-        ))}
+            {categories.map((category) => (
+              <motion.button
+                key={category}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-3 rounded-full 
+                           bg-white/10 backdrop-blur-lg 
+                           border border-white/20 
+                           text-black font-medium
+                           hover:text-orange-400 hover:border-orange-400 
+                           transition whitespace-nowrap"
+                onClick={() => fetchCategory(category)}
+              >
+                {category}
+              </motion.button>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

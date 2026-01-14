@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X } from "lucide-react";
 
 const Navbar = () => {
+  const [open, setOpen] = useState(false);
 
   return (
     <motion.nav
@@ -25,13 +27,13 @@ const Navbar = () => {
           </span>
         </Link>
 
-        {/* Nav Links */}
-        <div className="flex gap-8">
+        {/* Desktop Menu */}
+        <div className="hidden md:flex gap-8">
           <NavLink
             to="/"
             end
             className={({ isActive }) =>
-              `relative text-sm uppercase tracking-wider transition ${
+              `text-sm uppercase tracking-wider ${
                 isActive ? "text-orange-400" : "text-white/80"
               }`
             }
@@ -42,7 +44,7 @@ const Navbar = () => {
           <NavLink
             to="/favorite"
             className={({ isActive }) =>
-              `relative text-sm uppercase tracking-wider transition ${
+              `text-sm uppercase tracking-wider ${
                 isActive ? "text-orange-400" : "text-white/80"
               }`
             }
@@ -50,7 +52,43 @@ const Navbar = () => {
             <motion.span whileHover={{ y: -2 }}>Favorite</motion.span>
           </NavLink>
         </div>
+
+        {/* Hamburger Button */}
+        <button onClick={() => setOpen(!open)} className="md:hidden text-white">
+          {open ? <X size={28} /> : <Menu size={28} />}
+        </button>
       </div>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="md:hidden bg-white backdrop-blur-xl border-t border-white/10"
+          >
+            <div className="flex flex-col px-6 py-8 gap-6">
+              <NavLink
+                to="/"
+                onClick={() => setOpen(false)}
+                className="text-orange-400 text-lg"
+              >
+                Home
+              </NavLink>
+
+              <NavLink
+                to="/favorite"
+                onClick={() => setOpen(false)}
+                className="text-orange-400 text-lg"
+              >
+                Favorite
+              </NavLink>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };
